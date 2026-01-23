@@ -67,7 +67,8 @@ class JavaScriptAnalyzer:
                     "name": function_name,
                     "language": "javascript",
                     "imports": imports,
-                    "parameters": params,
+                    "params": params,
+                    "code": self.node_text(code, name_node)
                 })
 
             for child in node.children:
@@ -99,7 +100,8 @@ class JavaScriptAnalyzer:
                         "name": function_name,
                         "language": "javascript",
                         "imports": imports,
-                        "parameters": params,
+                        "params": params,
+                        "code": self.node_text(code, name_node)
                     })
 
             for child in node.children:

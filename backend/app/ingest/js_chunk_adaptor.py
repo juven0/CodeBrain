@@ -16,13 +16,42 @@ class JS_chunk_adaptor:
         exports = parsed_js.get("exports")
 
         for fn in parsed_js.get("function", []):
-            chunks.append(Chunk(imports=imports)
-            )
+            chunks.append(Chunk(
+                    imports=imports, 
+                    name=fn.get("name"),
+                    type=fn.get("type"),
+                    language=fn.get("language"),
+                    params=fn.get("params"),
+                    code=fn.get("code"),
+                    path= self.file_path))
         
         for ar in parsed_js.get("arrow_functions", []):
-            chunks.append(Chunk(imports=imports))
+            chunks.append(
+                Chunk(
+                    imports=imports,
+                    name=fn.get("name"),
+                    type=fn.get("type"),
+                    language=fn.get("language"),
+                    params=fn.get("params"),
+                    code=fn.get("code"),
+                    path= self.file_path))
         
-        for cl in parsed_js.get("classes", []):
-            chunks.append(Chunk(imports=imports))
+        for cls in parsed_js.get("classes", []):
+            metadata = {}
+
+            if "methods" in cls:
+                metadata["methods"] = cls["methods"]
+
+            chunks.append(
+                Chunk(
+                    imports=imports,
+                    name=fn.get("name"),
+                    type=fn.get("type"),
+                    language=fn.get("language"),
+                    params=fn.get("params"),
+                    code=fn.get("code"),
+                    path= self.file_path,
+                    metadata=metadata
+                    ))
         
         return chunks
