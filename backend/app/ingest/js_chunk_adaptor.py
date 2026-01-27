@@ -1,9 +1,9 @@
 from typing import List
-from backend.app.ingest.chunk import Chunk
+from chunk import Chunk
 from js_ingest import JavaScriptAnalyzer
 
 
-class JS_chunk_adaptor:
+class JSChunkAdaptor:
     def __init__(self, file_path):
         self.js_analizer = JavaScriptAnalyzer()
         self.file_path = file_path
@@ -15,7 +15,7 @@ class JS_chunk_adaptor:
         imports = parsed_js.get("imports")
         exports = parsed_js.get("exports")
 
-        for fn in parsed_js.get("function", []):
+        for fn in parsed_js.get("functions", []):
             chunks.append(Chunk(
                     imports=imports, 
                     name=fn.get("name"),
@@ -29,11 +29,11 @@ class JS_chunk_adaptor:
             chunks.append(
                 Chunk(
                     imports=imports,
-                    name=fn.get("name"),
-                    type=fn.get("type"),
-                    language=fn.get("language"),
-                    params=fn.get("params"),
-                    code=fn.get("code"),
+                    name=ar.get("name"),
+                    type=ar.get("type"),
+                    language=ar.get("language"),
+                    params=ar.get("params"),
+                    code=ar.get("code"),
                     path= self.file_path))
         
         for cls in parsed_js.get("classes", []):

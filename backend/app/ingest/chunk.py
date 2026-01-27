@@ -22,7 +22,7 @@ class Chunk:
             f"Type: {self.type}",
             f"Nom: {self.name}",
             f"Langage: {self.language}",
-            f"Fichier: {self.file_path}",
+            f"Fichier: {self.path}",
             
         ]
 
