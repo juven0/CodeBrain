@@ -1,5 +1,5 @@
 import chromadb
-from langchain_vectrorstores import Chroma
+from langchain import Chroma
 from langchain_google_genai import GoogleGenerativeAIEmbeddings 
 
 def query_chroma_db(query: str):
