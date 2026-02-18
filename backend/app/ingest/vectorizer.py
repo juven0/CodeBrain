@@ -7,7 +7,9 @@ load_dotenv()
 
 if not os.getenv("GOOGLE_API_KEY"):
     os.environ["GOOGLE_API_KEY"] = getpass.getpass("Enter your Google API key: ")
-    
-embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
-vector = embeddings.embed_query("hello, world!")
-print(vector)
+
+def embeddAnswer( answer : str):
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
+    vector = embeddings.embed_query(answer)
+    return vector
+
