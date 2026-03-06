@@ -38,7 +38,7 @@ def search(query):
     hf_token = os.getenv("HF_API_TOKEN")
     client = InferenceClient(api_key=hf_token)
 
-    completion = client.chat.completions.create(
+    stream = client.chat.completions.create(
         model="openai/gpt-oss-120b",
         messages=[
             {
@@ -50,10 +50,14 @@ def search(query):
                 "content": c+ "\n" + q +"\n"+ i
             }
         ],
+        stream=True
     )
 
-    print(completion.choices[0].message.content)
+    for chunk in stream:
+        if chunk.choices[0].delta.content:
+            print(chunk.choices[0].delta.content, end="", flush=True)
+
 
 #process()
-search("z")
+search("")
 
