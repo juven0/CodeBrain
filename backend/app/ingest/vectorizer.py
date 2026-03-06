@@ -1,6 +1,8 @@
 import os
 import getpass
 from dotenv import load_dotenv
+from google import genai
+from google.genai import types
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 
@@ -14,10 +16,20 @@ class GeminiEmbedder:
             )
 
         self.model = model
-        self.embeddings = GoogleGenerativeAIEmbeddings(model=self.model)
+        self.embeddings = GoogleGenerativeAIEmbeddings(
+            model=self.model
+            )
+        self.client = genai.Client()
 
     def embed_document(self, text: str) -> list[float]:
-        return self.embeddings.embed_documents([text])[0]
+        return self.client.models.embed_content(
+        model="gemini-embedding-001",
+        contents=text,
+        config=types.EmbedContentConfig(output_dimensionality=768)
+        )
 
     def embed_query(self, query: str) -> list[float]:
         return self.embeddings.embed_query(query)
+    
+    def dimension(self) -> int:
+        return len(self.embed_query("test"))

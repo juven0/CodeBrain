@@ -1,37 +1,41 @@
-import hashlib
 import os
 from typing import List
 from chunk import Chunk
 from js_chunk_adaptor import JSChunkAdaptor
 
-SUPORTED_EXT = [".js"]
 
-def read_repos(path : str):
-    files: List[str] = []
-    for root, dirs, filenames in os.walk(path):
-        for file in filenames: 
-            if any(file.endswith(ext) for ext in SUPORTED_EXT):
-                files.append(os.path.join(root,file))
-    
-    return files
+class RepositoryReader:
 
-def read_file(file_path):
-    with open(file_path, "r", encoding="utf8") as f:
-        return f.read()
+    SUPPORTED_EXT = [".js"]
 
-def compute_hash(text):
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+    def __init__(self):
+        pass
 
-REPO_PATH = "../WorldWise-RESTful-API"
+    def read_repo(self, repo_path) -> List[str]:
+        files: List[str] = []
 
-files = read_repos(REPO_PATH)
+        for root, dirs, filenames in os.walk(repo_path):
+            for file in filenames:
+                if any(file.endswith(ext) for ext in self.SUPPORTED_EXT):
+                    files.append(os.path.join(root, file))
 
-code = ""
-for f in files:
-    if "service.js" in f:
-        code = read_file(f)
+        return files
 
-JS_adaptor = JSChunkAdaptor("test")
-chunks = JS_adaptor.normalize(code)
-for ch in chunks:
-    print(ch.to_embedding())
+    def read_file(self, file_path: str) -> str:
+        with open(file_path, "r", encoding="utf8") as f:
+            return f.read()
+ 
+
+# REPO_PATH = "../WorldWise-RESTful-API"
+
+# files = read_repos(REPO_PATH)
+
+# code = ""
+# for f in files:
+#     if "service.js" in f:
+#         code = read_file(f)
+
+# JS_adaptor = JSChunkAdaptor("test")
+# chunks = JS_adaptor.normalize(code)
+# for ch in chunks:
+#     print(ch.to_embedding())

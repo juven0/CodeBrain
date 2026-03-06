@@ -45,11 +45,11 @@ class JSChunkAdaptor:
             chunks.append(
                 Chunk(
                     imports=imports,
-                    name=fn.get("name"),
-                    type=fn.get("type"),
-                    language=fn.get("language"),
-                    params=fn.get("params"),
-                    code=fn.get("code"),
+                    name=cls.get("name"),
+                    type=cls.get("type"),
+                    language=cls.get("language"),
+                    params=cls.get("params"),
+                    code=cls.get("code"),
                     path= self.file_path,
                     metadata=metadata
                     ))
