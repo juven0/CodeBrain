@@ -29,7 +29,11 @@ class GeminiEmbedder:
         )
 
     def embed_query(self, query: str) -> list[float]:
-        return self.embeddings.embed_query(query)
+         return self.client.models.embed_content(
+        model="gemini-embedding-001",
+        contents=query,
+        config=types.EmbedContentConfig(output_dimensionality=768)
+        )
     
     def dimension(self) -> int:
         return len(self.embed_query("test"))

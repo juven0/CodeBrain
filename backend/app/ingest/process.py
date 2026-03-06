@@ -1,6 +1,8 @@
 from to_embeding import RepositoryReader
 from js_chunk_adaptor import JSChunkAdaptor
 from vecltor_storage import PineconeVectorStore
+from huggingface_hub import InferenceClient
+import os 
 
 REPO_PATH = "../WorldWise-RESTful-API"
 JS_FILES = [".js"]
@@ -19,5 +21,39 @@ def process():
             chunks = jsAdaptor.normalize(code)
             storage.upsert_chunks(chunks)
 
-process()
+def search(query):
+    storage = PineconeVectorStore()
+    context = storage.query(query)
+    c = f"Contexte extrait du code :{context}"
+    q = f"Question :{query}"
+    i = """Instructions pour la réponse :
+        1. Fournis une réponse claire et concise.
+        2. Explique les fonctions, classes, paramètres ou imports si nécessaire.
+        3. Ne fais aucune supposition en dehors du contexte.
+        4. Si la question concerne plusieurs fonctions ou fichiers, structure la réponse avec des titres.
+        5. Ajoute éventuellement un exemple d'utilisation si pertinent.
+
+        Réponse :"""
+
+    hf_token = os.getenv("HF_API_TOKEN")
+    client = InferenceClient(api_key=hf_token)
+
+    completion = client.chat.completions.create(
+        model="openai/gpt-oss-120b",
+        messages=[
+            {
+                "role": "system",
+                "content": "Tu es software engineer senior expert en code JavaScript. Ton rôle est de répondre aux questions en utilisant uniquement le contexte fourni ci-dessous. Si l'information n'est pas dans le contexte, répond honnêtement que tu ne sais pas."
+            },
+            {
+                "role": "user",
+                "content": c+ "\n" + q +"\n"+ i
+            }
+        ],
+    )
+
+    print(completion.choices[0].message.content)
+
+#process()
+search("z")
 

@@ -17,7 +17,7 @@ class PineconeVectorStore:
 
         self.store = Pinecone(api_key=self.api_key)
 
-        # self._ensure_index()
+        self._ensure_index()
 
         self.index = self.store.Index(self.index_name)
 
@@ -61,7 +61,7 @@ class PineconeVectorStore:
 
     def query(self, query: str, top_k: int = 5):
 
-        query_embedding = self.embedder.embed_query(query)
+        query_embedding = self.embedder.embed_query(query).embeddings[0].values
 
         result = self.index.query(
             vector=query_embedding,
