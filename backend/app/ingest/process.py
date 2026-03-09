@@ -26,7 +26,7 @@ def search(query):
     context = storage.query(query)
     c = f"Contexte extrait du code :{context}"
     q = f"Question :{query}"
-    i = """Instructions pour la réponse :
+    i = f"""Instructions pour la réponse :
         1. Fournis une réponse claire et concise.
         2. Explique les fonctions, classes, paramètres ou imports si nécessaire.
         3. Ne fais aucune supposition en dehors du contexte.
@@ -59,5 +59,5 @@ def search(query):
 
 
 #process()
-search("")
+search("quelle point je doit ameliorer pour une meilleur gestion du user")
 
