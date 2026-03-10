@@ -5,7 +5,6 @@ import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
-// ─── Bouton copier ────────────────────────────────────────────────────────────
 function CopyButton({ code }: { code: string }) {
   const [copied, setCopied] = useState(false);
   return (
@@ -24,9 +23,7 @@ function CopyButton({ code }: { code: string }) {
   );
 }
 
-// ─── Composants Markdown stylisés ────────────────────────────────────────────
 const mdComponents: React.ComponentProps<typeof Markdown>["components"] = {
-  // ── Blocs de code ─────────────────────────────────────────────────────────
   code({ node, inline, className, children, ...props }: any) {
     const match = /language-(\w+)/.exec(className || "");
     const code = String(children).replace(/\n$/, "");
@@ -60,7 +57,6 @@ const mdComponents: React.ComponentProps<typeof Markdown>["components"] = {
       );
     }
 
-    // Code inline
     return (
       <code
         className="bg-violet-100 text-violet-800 font-mono rounded px-1.5 py-0.5 text-[0.82em]"
@@ -71,9 +67,6 @@ const mdComponents: React.ComponentProps<typeof Markdown>["components"] = {
     );
   },
 
-  // ── Titres ────────────────────────────────────────────────────────────────
-  // Tailwind preflight reset tous les styles natifs h1-h6,
-  // les classes de taille/margin/border sont donc toutes explicites.
   h1: ({ children }) => (
     <h1 className="text-xl font-bold text-neutral-900 mt-5 mb-2 pb-1.5 border-b-2 border-violet-100 text-left">
       {children}
@@ -95,16 +88,12 @@ const mdComponents: React.ComponentProps<typeof Markdown>["components"] = {
     </h4>
   ),
 
-  // ── Paragraphe ────────────────────────────────────────────────────────────
   p: ({ children }) => (
     <p className="mb-2 leading-relaxed text-[13.5px] whitespace-pre-line text-left">
       {children}
     </p>
   ),
 
-  // ── Listes ───────────────────────────────────────────────────────────────
-  // list-disc / list-decimal + pl-5 sont obligatoires :
-  // Tailwind preflight supprime list-style et padding nativement.
   ul: ({ children }) => (
     <ul className="list-disc pl-5 my-2 space-y-1 text-[13.5px] text-left">
       {children}
@@ -119,7 +108,6 @@ const mdComponents: React.ComponentProps<typeof Markdown>["components"] = {
     <li className="leading-relaxed text-left">{children}</li>
   ),
 
-  // ── Tableau ───────────────────────────────────────────────────────────────
   table: ({ children }) => (
     <div className="overflow-x-auto my-3 rounded-xl border border-stone-300">
       <table
@@ -150,14 +138,12 @@ const mdComponents: React.ComponentProps<typeof Markdown>["components"] = {
     </td>
   ),
 
-  // ── Blockquote ────────────────────────────────────────────────────────────
   blockquote: ({ children }) => (
     <blockquote className="border-l-[3px] border-violet-400 pl-3 my-2 text-stone-500 italic text-[13px] text-left">
       {children}
     </blockquote>
   ),
 
-  // ── Inline ────────────────────────────────────────────────────────────────
   strong: ({ children }) => (
     <strong className="font-bold text-neutral-900">{children}</strong>
   ),
@@ -178,7 +164,6 @@ const mdComponents: React.ComponentProps<typeof Markdown>["components"] = {
   hr: () => <hr className="my-4 border-0 border-t border-stone-200" />,
 };
 
-// ─── Export ───────────────────────────────────────────────────────────────────
 export const MarkdownRenderer = ({ children }: { children: string }) => {
   return (
     <div className="text-neutral-700 text-left" dir="ltr">
