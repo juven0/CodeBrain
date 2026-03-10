@@ -1,24 +1,25 @@
-import { useEffect, useRef } from "react";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { useEffect, useRef, useState } from "react";
+import { MarkdownRenderer } from "../components/markdown";
 
 export const ChatMessages = ({ messages, loading }) => {
+  const [content, setContent] = useState("");
+  const fetchMd = () => {
+    fetch("/text.md")
+      .then((res) => {
+        return res.text();
+      })
+      .then((text) => {
+        setContent(text);
+      });
+  };
+
+  useEffect(() => {
+    fetchMd();
+  });
   const bottomRef = useRef(null);
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
-
-  const markdown = `Here is some JavaScript code:
-
-~~~js
-  const test = ()=>{
-    ajdkj()
-  }
-~~~
-`;
 
   return (
     <div className="flex-1 overflow-y-auto px-11 pt-7">
@@ -56,30 +57,7 @@ export const ChatMessages = ({ messages, loading }) => {
                   ? "0 4px 14px #7c71f530"
                   : "0 1px 6px #00000008",
             }}
-          >
-            <Markdown
-              children={markdown}
-              components={{
-                code(props) {
-                  const { children, className, node, ...rest } = props;
-                  const match = /language-(\w+)/.exec(className || "");
-                  return match ? (
-                    <SyntaxHighlighter
-                      {...rest}
-                      PreTag="div"
-                      children={String(children).replace(/\n$/, "")}
-                      language={match[1]}
-                      style={dark}
-                    />
-                  ) : (
-                    <code {...rest} className={className}>
-                      {children}
-                    </code>
-                  );
-                },
-              }}
-            />
-          </div>
+          ></div>
         </div>
       ))}
 
@@ -111,6 +89,9 @@ export const ChatMessages = ({ messages, loading }) => {
         </div>
       )}
       <div ref={bottomRef} />
+      <MarkdownRenderer>
+        {content.replace(/(\[.*?\])/g, "!1\n")}
+      </MarkdownRenderer>
     </div>
   );
 };
