@@ -1,23 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { MarkdownRenderer } from "../components/markdown";
 import { UserrChatBox } from "../components/userChatBox";
 import lama from "../assets/sheep pp.jpeg";
 
 export const ChatMessages = ({ messages, loading }) => {
-  const [content, setContent] = useState("");
-  const fetchMd = () => {
-    fetch("/text.md")
-      .then((res) => {
-        return res.text();
-      })
-      .then((text) => {
-        setContent(text);
-      });
-  };
-
-  useEffect(() => {
-    fetchMd();
-  });
   const bottomRef = useRef(null);
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -39,7 +25,13 @@ export const ChatMessages = ({ messages, loading }) => {
               <img src={lama} />
             </div>
           )}
-          {msg.role === "user" && <UserrChatBox message={msg} />}
+          {msg.role === "user" ? (
+            <UserrChatBox message={msg} />
+          ) : (
+            <MarkdownRenderer>
+              {msg?.content.replace(/(\[.*?\])/g, "!1\n")}
+            </MarkdownRenderer>
+          )}
         </div>
       ))}
 
@@ -48,12 +40,6 @@ export const ChatMessages = ({ messages, loading }) => {
           className="flex gap-2.5 mb-4"
           style={{ animation: "fadeUp 0.25s ease" }}
         >
-          <div
-            className="w-10 h-10 rounded-full bg-neutral-900 flex-shrink-0 mt-0.5 flex items-center justify-center text-white"
-            style={{ fontSize: 11 }}
-          >
-            <img src={lama} />
-          </div>
           <div
             className="bg-white border border-stone-200 flex gap-1.5 items-center px-4 py-3"
             style={{ borderRadius: "4px 16px 16px 16px" }}
@@ -71,9 +57,6 @@ export const ChatMessages = ({ messages, loading }) => {
         </div>
       )}
       <div ref={bottomRef} />
-      <MarkdownRenderer>
-        {content.replace(/(\[.*?\])/g, "!1\n")}
-      </MarkdownRenderer>
     </div>
   );
 };

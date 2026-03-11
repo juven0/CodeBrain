@@ -1,44 +1,42 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { Sidebar } from "../layout/sidebare";
 import { InputBar } from "../components/input";
 import { WelcomeScreen } from "../layout/welcome";
 import { ChatMessages } from "../layout/chatLayout";
+import type { chatItem } from "../types/chat";
+import { UseAxios } from "../hooks/useAxios";
+import { useStreamChat } from "../hooks/streamMessage";
 
 export default function ChatLayout() {
-  const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState<chatItem[]>([]);
   const [prefill, setPrefill] = useState("");
 
-  const sendMessage = async (text) => {
-    const next = [...messages, { role: "user", content: text }];
-    setMessages(next);
-    setMessages((prev) => [...prev, { role: "assistant", content: "ok" }]);
-    //   setLoading(true);
-    //   try {
-    //     const res = await fetch("https://api.anthropic.com/v1/messages", {
-    //       method: "POST",
-    //       headers: { "Content-Type": "application/json" },
-    //       body: JSON.stringify({
-    //         model: "claude-sonnet-4-20250514",
-    //         max_tokens: 1000,
-    //         messages: next.map((m) => ({ role: m.role, content: m.content })),
-    //       }),
-    //     });
-    //     const data = await res.json();
-    //     const reply = data?.content?.[0]?.text || "Unexpected error.";
-    //     setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
-    //   } catch {
-    //     setMessages((prev) => [
-    //       ...prev,
-    //       {
-    //         role: "assistant",
-    //         content: "Something went wrong. Please try again.",
-    //       },
-    //     ]);
-    //   } finally {
-    //     setLoading(false);
-    //   }
+  const { message, loading, send } = useStreamChat();
+
+  const sendMessage = async (text: string) => {
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", content: text },
+      { role: "assistant", content: "" },
+    ]);
+
+    await send(text);
   };
+
+  useEffect(() => {
+    if (!message) return;
+
+    setMessages((prev) => {
+      const updated = [...prev];
+
+      updated[updated.length - 1] = {
+        role: "assistant",
+        content: message,
+      };
+
+      return updated;
+    });
+  }, [message]);
 
   return (
     <div

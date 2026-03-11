@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from process import search
 
-ALLOWED_ORIGINS = ["http://localhost:3000"]
+ALLOWED_ORIGINS = ["http://localhost:5173"]
 ALLOWED_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH"]
 ALLOWED_HEADERS: str = "*"
 

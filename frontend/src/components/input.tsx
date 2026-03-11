@@ -58,7 +58,7 @@ export const InputBar = ({ onSend, prefill, setPrefill, disabled }) => {
           />
           <div className="flex items-center gap-1.5 flex-shrink-0 pt-0.5">
             <div className="flex items-center gap-1 bg-stone-100 rounded-full px-2.5 py-1 text-stone-500 cursor-pointer font-medium text-xs">
-              🌐 All Web <span className="text-stone-300 ml-0.5">▾</span>
+              {/* 🌐 All Web <span className="text-stone-300 ml-0.5">▾</span> */}
             </div>
           </div>
         </div>
