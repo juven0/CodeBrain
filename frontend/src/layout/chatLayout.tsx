@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { MarkdownRenderer } from "../components/markdown";
+import { UserrChatBox } from "../components/userChatBox";
+import lama from "../assets/sheep pp.jpeg";
 
 export const ChatMessages = ({ messages, loading }) => {
   const [content, setContent] = useState("");
@@ -31,33 +33,13 @@ export const ChatMessages = ({ messages, loading }) => {
         >
           {msg.role === "assistant" && (
             <div
-              className="w-7 h-7 rounded-full bg-neutral-900 flex-shrink-0 mt-0.5 flex items-center justify-center text-white"
+              className="w-10 h-10 rounded-full bg-neutral-900 flex-shrink-0 mt-0.5 flex items-center justify-center text-white"
               style={{ fontSize: 11 }}
             >
-              ✦
+              <img src={lama} />
             </div>
           )}
-          <div
-            className="whitespace-pre-wrap"
-            style={{
-              maxWidth: "66%",
-              padding: "11px 15px",
-              borderRadius:
-                msg.role === "user"
-                  ? "16px 4px 16px 16px"
-                  : "4px 16px 16px 16px",
-              background: "#fff",
-              color: "#2a2a2a",
-              border: msg.role === "user" ? "1px solid #e9e5e0" : "none",
-              fontSize: 13.5,
-              lineHeight: 1.65,
-              fontFamily: "'DM Sans', sans-serif",
-              boxShadow:
-                msg.role === "user"
-                  ? "0 4px 14px #7c71f530"
-                  : "0 1px 6px #00000008",
-            }}
-          ></div>
+          {msg.role === "user" && <UserrChatBox message={msg} />}
         </div>
       ))}
 
@@ -67,10 +49,10 @@ export const ChatMessages = ({ messages, loading }) => {
           style={{ animation: "fadeUp 0.25s ease" }}
         >
           <div
-            className="w-7 h-7 rounded-full bg-neutral-900 flex-shrink-0 mt-0.5 flex items-center justify-center text-white"
+            className="w-10 h-10 rounded-full bg-neutral-900 flex-shrink-0 mt-0.5 flex items-center justify-center text-white"
             style={{ fontSize: 11 }}
           >
-            ✦
+            <img src={lama} />
           </div>
           <div
             className="bg-white border border-stone-200 flex gap-1.5 items-center px-4 py-3"

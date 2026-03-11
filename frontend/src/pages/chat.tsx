@@ -12,31 +12,32 @@ export default function ChatLayout() {
   const sendMessage = async (text) => {
     const next = [...messages, { role: "user", content: text }];
     setMessages(next);
-    setLoading(true);
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: next.map((m) => ({ role: m.role, content: m.content })),
-        }),
-      });
-      const data = await res.json();
-      const reply = data?.content?.[0]?.text || "Unexpected error.";
-      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "Something went wrong. Please try again.",
-        },
-      ]);
-    } finally {
-      setLoading(false);
-    }
+    setMessages((prev) => [...prev, { role: "assistant", content: "ok" }]);
+    //   setLoading(true);
+    //   try {
+    //     const res = await fetch("https://api.anthropic.com/v1/messages", {
+    //       method: "POST",
+    //       headers: { "Content-Type": "application/json" },
+    //       body: JSON.stringify({
+    //         model: "claude-sonnet-4-20250514",
+    //         max_tokens: 1000,
+    //         messages: next.map((m) => ({ role: m.role, content: m.content })),
+    //       }),
+    //     });
+    //     const data = await res.json();
+    //     const reply = data?.content?.[0]?.text || "Unexpected error.";
+    //     setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+    //   } catch {
+    //     setMessages((prev) => [
+    //       ...prev,
+    //       {
+    //         role: "assistant",
+    //         content: "Something went wrong. Please try again.",
+    //       },
+    //     ]);
+    //   } finally {
+    //     setLoading(false);
+    //   }
   };
 
   return (
