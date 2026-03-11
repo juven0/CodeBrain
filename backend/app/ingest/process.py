@@ -39,7 +39,7 @@ def search(query):
     client = InferenceClient(api_key=hf_token)
 
     stream = client.chat.completions.create(
-        model="openai/gpt-oss-120b",
+        model="openai/gpt-oss-20b",
         messages=[
             {
                 "role": "system",
@@ -55,7 +55,7 @@ def search(query):
 
     for chunk in stream:
         if chunk.choices[0].delta.content:
-            print(chunk.choices[0].delta.content, end="", flush=True)
+            yield chunk.choices[0].delta.content
 
 
 #process()

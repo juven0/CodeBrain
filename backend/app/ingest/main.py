@@ -1,9 +1,11 @@
 from fastapi import FastAPI, Request, status
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-ALLOWED_ORIGINS: str = "http://localhost:3000"
-ALLOWED_METHODS: str = "GET,POST,PUT,DELETE,PATCH"
+from process import search
+
+ALLOWED_ORIGINS = ["http://localhost:3000"]
+ALLOWED_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH"]
 ALLOWED_HEADERS: str = "*"
 
 app = FastAPI()
@@ -21,16 +23,29 @@ app.add_middleware(
     tags=["Root"],
     summary="Page d'accueil de l'API"
 )
-async def root():
+async def root():   
     """Route racine de l'API"""
     return {
         "message": f"wellcome to codeBrain api",
         "version": "v1",
         "status": "operational"
     }
+from pydantic import BaseModel
+
+class ChatRequest(BaseModel):
+    query: str
+
+@app.post("/chat")
+def chat(request: ChatRequest):
+    return StreamingResponse(
+        search(request.query),
+        media_type="text/plain"
+    )
 
 
-if __name__ == "__name__":
+
+
+if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(
